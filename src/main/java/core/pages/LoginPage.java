@@ -20,6 +20,7 @@ public class LoginPage extends BasePage {
     private final SelenideElement mailRuButton = $("[data-l='t,mailru']");
 
     private final SelenideElement errorMessage = $("div.input-e.login_error");
+    private SelenideElement goToRecoveryButton = $("[value='st.go_to_recovery']");
 
     {
         verifyPageElements(); 
@@ -47,7 +48,7 @@ public class LoginPage extends BasePage {
         return errorMessage.shouldBe(visible).getText();
     }
 
-    @Step("Входим на сайт с логином: {username} и паролем")
+    @Step("Входим на сайт с логином: {username} и {password}")
     public void login(String username, String password) {
         usernameField.shouldBe(visible).setValue(username);
         passwordField.shouldBe(visible).setValue(password);
@@ -60,9 +61,14 @@ public class LoginPage extends BasePage {
         loginButton.shouldBe(visible).click();
     }
 
-    @Step("Входим на сайт только с паролем")
+    @Step("Входим на сайт только с {password}")
     public void loginPassword(String password) {
         passwordField.shouldBe(visible).setValue(password);
+        //loginButton.shouldBe(visible).click();
+    }
+
+    @Step("Нажимаем на кнопку Войти")
+    public void clickLogin() {
         loginButton.shouldBe(visible).click();
     }
 
@@ -90,4 +96,10 @@ public class LoginPage extends BasePage {
     public void loginWithMailRu() {
         mailRuButton.shouldBe(visible).click();
     }
+
+    @Step("Нажимаем Восстановить профиль")
+    public void goToRecovery() {
+        goToRecoveryButton.shouldBe(visible).click();
+    }
+
 }

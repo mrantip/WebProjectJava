@@ -1,12 +1,16 @@
 package core.pages;
 
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverConditions;
 import core.base.BasePage;
 import io.qameta.allure.Step;
 
+import java.util.List;
+
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$x;
+import static com.codeborne.selenide.Selenide.*;
 
 public class LoginPage extends BasePage {
     private final SelenideElement usernameField = $("[name='st.email']");
@@ -22,6 +26,8 @@ public class LoginPage extends BasePage {
     private final SelenideElement errorMessage = $("div.input-e.login_error");
     private SelenideElement goToRecoveryButton = $("[value='st.go_to_recovery']");
 
+    private SelenideElement searchField = $("input[data-uikit-old='Input']");
+
     {
         verifyPageElements(); 
     }
@@ -36,6 +42,7 @@ public class LoginPage extends BasePage {
         vkButton.shouldBe(visible);
         yandexButton.shouldBe(visible);
         mailRuButton.shouldBe(visible);
+        searchField.shouldBe(visible);
     }
 
     @Step("Проверяем видимость сообщения об ошибке входа")
@@ -102,4 +109,20 @@ public class LoginPage extends BasePage {
         goToRecoveryButton.shouldBe(visible).click();
     }
 
+    @Step("Вводим текст в поле поиска")
+    public void inputSearchText(String searchText) {
+        searchField.shouldBe(visible).sendKeys(searchText);
+    }
+
+    @Step("Выбираем один из результатов поиска")
+    public void selectSearchResult() {
+        //inputSearchText(searchText);
+        SelenideElement result = $("a.suggest-item__zd7xg").shouldBe(visible);
+        $$("a.suggest-item__zd7xg").get(0).click();
+    }
+
+    @Step("Проверяем что выполнен переход на нужную страницу")
+    public void checkTransferPage(String page) {
+        Selenide.webdriver().shouldHave(WebDriverConditions.url(page));
+    }
 }
